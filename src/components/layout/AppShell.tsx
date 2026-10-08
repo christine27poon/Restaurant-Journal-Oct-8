@@ -1,10 +1,11 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet, ScrollRestoration, useLocation } from 'react-router-dom'
 import { Plus } from 'lucide-react'
 import { BottomTabBar } from './BottomTabBar'
 import { SideNav } from './SideNav'
 import { LinkButton } from '@/components/ui/Button'
 
 export function AppShell() {
+  const { pathname } = useLocation()
   return (
     <div className="min-h-screen">
       <a
@@ -13,6 +14,7 @@ export function AppShell() {
       >
         Skip to content
       </a>
+      <ScrollRestoration />
       <SideNav />
       <div className="md:pl-sidebar">
         <main
@@ -23,14 +25,16 @@ export function AppShell() {
         </main>
       </div>
       {/* Mobile floating action: sits above the tab bar. */}
-      <LinkButton
-        to="/log"
-        size="lg"
-        className="fixed bottom-[calc(4rem+env(safe-area-inset-bottom)+0.75rem)] right-4 z-20 shadow-lift md:hidden"
-      >
-        <Plus aria-hidden className="h-5 w-5" />
-        Log a meal
-      </LinkButton>
+      {pathname !== '/log' && (
+        <LinkButton
+          to="/log"
+          size="lg"
+          className="fixed bottom-[calc(4rem+env(safe-area-inset-bottom)+0.75rem)] right-4 z-20 shadow-lift md:hidden"
+        >
+          <Plus aria-hidden className="h-5 w-5" />
+          Log a meal
+        </LinkButton>
+      )}
       <BottomTabBar />
     </div>
   )
