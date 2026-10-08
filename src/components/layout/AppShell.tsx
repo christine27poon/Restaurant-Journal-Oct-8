@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import { Outlet, ScrollRestoration, useLocation } from 'react-router-dom'
 import { Plus } from 'lucide-react'
 import { BottomTabBar } from './BottomTabBar'
@@ -6,6 +7,17 @@ import { LinkButton } from '@/components/ui/Button'
 
 export function AppShell() {
   const { pathname } = useLocation()
+  const mainRef = useRef<HTMLElement>(null)
+  const firstRender = useRef(true)
+
+  // After navigating, move focus to the content so screen-reader and keyboard users start there.
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false
+      return
+    }
+    mainRef.current?.focus({ preventScroll: true })
+  }, [pathname])
   return (
     <div className="min-h-screen">
       <a
@@ -18,8 +30,10 @@ export function AppShell() {
       <SideNav />
       <div className="md:pl-sidebar">
         <main
+          ref={mainRef}
           id="main"
-          className="mx-auto w-full max-w-wide px-4 pb-40 pt-[calc(1.5rem+env(safe-area-inset-top))] sm:px-6 md:pb-16 md:pt-10"
+          tabIndex={-1}
+          className="mx-auto w-full max-w-wide outline-none px-4 pb-40 pt-[calc(1.5rem+env(safe-area-inset-top))] sm:px-6 md:pb-16 md:pt-10"
         >
           <Outlet />
         </main>

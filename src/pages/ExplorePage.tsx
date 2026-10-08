@@ -32,7 +32,7 @@ export function ExplorePage() {
             value={search}
             onChange={(event) => setSearch(event.target.value)}
             placeholder="Search places or cuisines"
-            className="block min-h-touch w-full rounded-lg border border-line-strong bg-surface pl-11 pr-4 text-body placeholder:text-ink-muted/80"
+            className="block min-h-touch w-full rounded-lg border border-line-strong bg-surface pl-11 pr-4 text-body placeholder:text-ink-muted"
           />
         </div>
 

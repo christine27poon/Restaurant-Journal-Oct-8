@@ -22,6 +22,7 @@ import {
   useRemovePlaceFromList,
   useUpdateList,
 } from '@/hooks/queries'
+import { useDocumentTitle } from '@/hooks/useDocumentTitle'
 import type { PlaceChoice } from '@/lib/schemas'
 import type { PlaceListDetail } from '@/types'
 
@@ -53,6 +54,7 @@ export function ListDetailPage() {
 }
 
 function ListDetail({ list }: { list: PlaceListDetail }) {
+  useDocumentTitle(list.name)
   const toast = useToast()
   const navigate = useNavigate()
   const updateList = useUpdateList()

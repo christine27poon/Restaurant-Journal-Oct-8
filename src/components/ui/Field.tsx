@@ -34,7 +34,7 @@ export function Field({ label, htmlFor, optional, hint, error, children }: Field
 }
 
 const inputBase =
-  'block w-full rounded-lg border bg-surface px-4 text-body text-ink placeholder:text-ink-muted/80 transition-colors focus-visible:outline-primary-600 disabled:opacity-60'
+  'block w-full rounded-lg border bg-surface px-4 text-body text-ink placeholder:text-ink-muted transition-colors focus-visible:outline-primary-600 disabled:opacity-60'
 
 type DescribedProps = { id: string; hasHint?: boolean; invalid?: boolean }
 

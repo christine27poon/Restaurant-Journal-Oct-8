@@ -41,7 +41,7 @@ function write(name: string, value: unknown): void {
         'Your browser is out of room to save this. Try a smaller photo or remove an older visit.',
       )
     }
-    throw new DataError('unknown', 'We couldn’t save that just now. Please try again.')
+    throw new DataError('unknown', 'Something went wrong with your saved data. Please try again.')
   }
 }
 

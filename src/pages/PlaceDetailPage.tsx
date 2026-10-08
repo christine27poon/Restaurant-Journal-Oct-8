@@ -12,6 +12,7 @@ import { StoryBlock } from '@/components/place/StoryBlock'
 import { WishlistButton } from '@/components/place/WishlistButton'
 import { VisitTimeline, VisitTimelineSkeleton } from '@/components/visit/VisitTimeline'
 import { usePlace, useProfile, useVisits } from '@/hooks/queries'
+import { useDocumentTitle } from '@/hooks/useDocumentTitle'
 import { HEALTH_TAG_LABEL } from '@/lib/constants'
 import { placeLocation, priceLabel } from '@/lib/format'
 import { tagsFromVisits } from '@/lib/places'
@@ -50,6 +51,7 @@ function PlaceDetail({ place }: { place: Place }) {
   const showHealthTags = profile.data?.preferences.show_health_tags ?? true
   const price = priceLabel(place.price_tier)
   const [addingToList, setAddingToList] = useState(false)
+  useDocumentTitle(place.name)
 
   return (
     <div className="space-y-8">

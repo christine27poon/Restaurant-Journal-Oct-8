@@ -16,6 +16,7 @@ export function JournalPage() {
     <>
       <PageHeader
         title={name ? `Hi ${name}` : 'Your journal'}
+        documentTitle="Journal"
         subtitle="What did you eat lately?"
         action={
           <LinkButton to="/log" size="lg" className="hidden md:inline-flex">

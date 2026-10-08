@@ -41,6 +41,20 @@ src/styles/index.css  Tailwind layers, focus ring, reduced-motion
 - Accessibility: semantic HTML, visible `:focus-visible` ring, meaningful `alt` on photos, AA contrast.
 - Run `npm run build`, `npm run lint`, and check 375 / 768 / 1280px widths after each change.
 
+## Shared building blocks (reuse before writing new ones)
+
+- `QueryView` (`components/ui`) renders loading / error (with retry) / empty / data for any query — use it for every data-driven screen.
+- `ChoiceGroup` = accessible selectable chips (native radio/checkbox in a fieldset). `Field` + `TextInput`/`TextArea` = labeled inputs with hint/error wiring. `Toggle` = labeled switch. `Dialog` = native `<dialog>` modal (mark the field to focus with `data-autofocus`).
+- `PlaceCombobox` = ARIA combobox for picking a place or typing a custom name; callers create custom places at submit time, reusing an existing place when the name matches.
+- `useToast()` for confirmations; `useDocumentTitle()` (PageHeader does this for you) for page titles; `copyText()` for clipboard.
+- Route changes move focus to `<main>` (see `AppShell`) so keyboard/screen-reader users land on the new content.
+
+## Accessibility notes
+
+- Token pairs are AA-checked: body/muted text ≥ 4.5:1, form-control borders (`line-strong`) ≥ 3:1. Re-check contrast if you change a color token. Placeholder text uses `ink-muted` (not a lighter tint).
+- Cards use a stretched link (`after:absolute after:inset-0`) so the whole card is the tap target; interactive children inside a card need `relative z-10`.
+- Query retries pause while the tab is hidden (TanStack Query behavior) — in the in-app browser pane, error states can look like endless loading until the tab is visible.
+
 ## Health-content rules
 
 - Health tags and "how I felt" are **self-reported labels**, not nutrition claims. No calories, medical/diet advice, or scores implying good/bad food.

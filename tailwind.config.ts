@@ -15,7 +15,8 @@ export default {
       canvas: '#FBF7F0', // page background (warm cream)
       surface: { DEFAULT: '#FFFFFF', sunken: '#F5EFE5' },
       ink: { DEFAULT: '#2B2420', soft: '#4A413A', muted: '#6B6058' }, // all AA on canvas/surface
-      line: { DEFAULT: '#E4DCCF', strong: '#C9BEAE' },
+      // `strong` is for form-control boundaries: >=3:1 on white, canvas and sunken.
+      line: { DEFAULT: '#E4DCCF', strong: '#938779' },
       primary: {
         50: '#FBEEE7',
         100: '#F6DACB',

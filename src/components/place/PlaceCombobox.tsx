@@ -108,7 +108,7 @@ export function PlaceCombobox({
           onBlur={() => setOpen(false)}
           onKeyDown={onKeyDown}
           className={cn(
-            'block min-h-touch w-full rounded-lg border bg-surface pl-11 pr-4 text-body text-ink placeholder:text-ink-muted/80',
+            'block min-h-touch w-full rounded-lg border bg-surface pl-11 pr-4 text-body text-ink placeholder:text-ink-muted',
             invalid ? 'border-danger' : 'border-line-strong',
           )}
         />
