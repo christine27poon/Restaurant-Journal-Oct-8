@@ -1,8 +1,10 @@
+import { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { MapPin, Plus, SearchX } from 'lucide-react'
+import { ListPlus, MapPin, Plus, SearchX } from 'lucide-react'
 import { BackLink } from '@/components/layout/BackLink'
 import { Chip } from '@/components/ui/Chip'
-import { LinkButton } from '@/components/ui/Button'
+import { Button, LinkButton } from '@/components/ui/Button'
+import { AddPlaceToListDialog } from '@/components/lists/AddPlaceToListDialog'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { QueryView } from '@/components/ui/QueryView'
 import { Skeleton } from '@/components/ui/Skeleton'
@@ -47,6 +49,7 @@ function PlaceDetail({ place }: { place: Place }) {
   const profile = useProfile()
   const showHealthTags = profile.data?.preferences.show_health_tags ?? true
   const price = priceLabel(place.price_tier)
+  const [addingToList, setAddingToList] = useState(false)
 
   return (
     <div className="space-y-8">
@@ -73,6 +76,10 @@ function PlaceDetail({ place }: { place: Place }) {
             Log a visit here
           </LinkButton>
           <WishlistButton placeId={place.id} />
+          <Button variant="secondary" onClick={() => setAddingToList(true)}>
+            <ListPlus aria-hidden className="h-5 w-5" />
+            Add to list
+          </Button>
         </div>
       </header>
 
@@ -140,6 +147,13 @@ function PlaceDetail({ place }: { place: Place }) {
           )
         }}
       </QueryView>
+
+      <AddPlaceToListDialog
+        open={addingToList}
+        onClose={() => setAddingToList(false)}
+        placeId={place.id}
+        placeName={place.name}
+      />
     </div>
   )
 }

@@ -3,6 +3,7 @@ import { Check, Plus, Search } from 'lucide-react'
 import { usePlaces } from '@/hooks/queries'
 import type { PlaceChoice } from '@/lib/schemas'
 import { placeLocation } from '@/lib/format'
+import { searchPlaces } from '@/lib/places'
 import { cn } from '@/lib/cn'
 import type { Place } from '@/types'
 
@@ -31,10 +32,12 @@ export function PlaceCombobox({
   const [text, setText] = useState(value?.name ?? '')
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState(0)
-  const places = usePlaces(text.trim())
+  // Load the (small) place list once and filter locally so options always match the typed text.
+  // If the list grows large or moves to Supabase, switch this to a debounced server search.
+  const places = usePlaces()
 
   const trimmed = text.trim()
-  const matches = (places.data ?? []).slice(0, 6)
+  const matches = searchPlaces(places.data ?? [], trimmed).slice(0, 6)
   const exact = matches.some((p) => p.name.toLowerCase() === trimmed.toLowerCase())
   const showCustom = trimmed.length > 0 && !exact
   const optionCount = matches.length + (showCustom ? 1 : 0)

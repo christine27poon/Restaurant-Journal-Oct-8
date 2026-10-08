@@ -13,13 +13,15 @@ import { PhotoPicker } from './PhotoPicker'
 import { FEELINGS, HEALTH_TAGS, PRICE_TIERS, RATINGS } from '@/lib/constants'
 import { quickLogSchema, type QuickLogInput, type QuickLogValues } from '@/lib/schemas'
 import { useCreatePlace, usePlaces, useCreateVisit, useSavePhoto } from '@/hooks/queries'
-import type { Place } from '@/types'
+import type { Place, PriceTier } from '@/types'
 
 interface QuickLogFormProps {
   /** Pre-fills the place (e.g. when starting from the wishlist). */
   initialPlace?: Place | null
   wishlistItemId?: string
   showHealthTags: boolean
+  /** From the profile; used when the chosen place has no usual price tier. */
+  defaultPriceTier?: PriceTier | null
 }
 
 const RATING_OPTIONS = RATINGS.map((r) => ({
@@ -39,7 +41,12 @@ function focusFirstError(errors: FieldErrors<QuickLogInput>) {
   if (first) document.getElementById(`field-${first}`)?.focus()
 }
 
-export function QuickLogForm({ initialPlace, wishlistItemId, showHealthTags }: QuickLogFormProps) {
+export function QuickLogForm({
+  initialPlace,
+  wishlistItemId,
+  showHealthTags,
+  defaultPriceTier = null,
+}: QuickLogFormProps) {
   const navigate = useNavigate()
   const toast = useToast()
   const allPlaces = usePlaces('')
@@ -65,7 +72,7 @@ export function QuickLogForm({ initialPlace, wishlistItemId, showHealthTags }: Q
       photo: null,
       dish_name: '',
       would_go_back: null,
-      price_tier: initialPlace?.price_tier ?? null,
+      price_tier: initialPlace?.price_tier ?? defaultPriceTier,
       health_tags: [],
       feeling: null,
       note: '',
@@ -140,7 +147,7 @@ export function QuickLogForm({ initialPlace, wishlistItemId, showHealthTags }: Q
                 field.onChange(choice)
                 // Nice default: carry the place's usual price tier unless the user already chose one.
                 if (place && !getFieldState('price_tier').isDirty) {
-                  setValue('price_tier', place.price_tier ?? null)
+                  setValue('price_tier', place.price_tier ?? defaultPriceTier)
                 }
               }}
             />

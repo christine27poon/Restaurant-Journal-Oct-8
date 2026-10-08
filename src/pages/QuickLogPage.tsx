@@ -47,6 +47,7 @@ export function QuickLogPage() {
           initialPlace={place.data}
           wishlistItemId={wishlistItemId}
           showHealthTags={profile.data.preferences.show_health_tags}
+          defaultPriceTier={profile.data.preferences.default_price_tier}
         />
       )}
     </>
