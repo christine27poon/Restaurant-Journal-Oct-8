@@ -9,6 +9,9 @@ import { Skeleton } from '@/components/ui/Skeleton'
 import { Toggle } from '@/components/ui/Toggle'
 import { useToast } from '@/components/ui/toast/useToast'
 import { useProfile, useUpdateProfile } from '@/hooks/queries'
+import { useAuth } from '@/hooks/useAuth'
+import { useNavigate } from 'react-router-dom'
+import { LogOut } from 'lucide-react'
 import { PRICE_TIERS } from '@/lib/constants'
 import { profileSchema, type ProfileValues } from '@/lib/schemas'
 import type { Profile } from '@/types'
@@ -33,12 +36,47 @@ export function ProfilePage() {
       >
         {(data) => <ProfileForm profile={data} />}
       </QueryView>
+      <AccountSection />
     </>
+  )
+}
+
+function AccountSection() {
+  const { user, enabled, signOut } = useAuth()
+  const navigate = useNavigate()
+  const toast = useToast()
+  if (!enabled) return null
+  return (
+    <section
+      aria-labelledby="account"
+      className="mt-8 max-w-content rounded-xl bg-surface p-5 shadow-soft"
+    >
+      <h2 id="account" className="text-h3">
+        Account
+      </h2>
+      {user?.email && <p className="mt-1 text-body text-ink-muted">Signed in as {user.email}</p>}
+      <Button
+        variant="secondary"
+        className="mt-4"
+        onClick={async () => {
+          try {
+            await signOut()
+            navigate('/login', { replace: true })
+          } catch {
+            toast.show('We couldn’t sign you out. Please try again.')
+          }
+        }}
+      >
+        <LogOut aria-hidden className="h-4 w-4" />
+        Sign out
+      </Button>
+    </section>
   )
 }
 
 function ProfileForm({ profile }: { profile: Profile }) {
   const toast = useToast()
+  const { enabled: hasAccounts } = useAuth()
   const update = useUpdateProfile()
   const {
     control,
@@ -134,7 +172,9 @@ function ProfileForm({ profile }: { profile: Profile }) {
       </section>
 
       <p className="text-small text-ink-muted">
-        Your journal is saved on this device for now. Accounts and syncing come later.
+        {hasAccounts
+          ? 'Your journal is saved to your account.'
+          : 'Your journal is saved on this device for now.'}
       </p>
 
       <Button type="submit" size="lg" disabled={isSubmitting || !isDirty}>

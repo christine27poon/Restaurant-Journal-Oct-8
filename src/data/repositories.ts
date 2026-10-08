@@ -6,6 +6,7 @@
  * Every method is async and may reject with a DataError.
  */
 import type {
+  AuthUser,
   NewPlace,
   NewPlaceList,
   NewVisit,
@@ -69,11 +70,39 @@ export interface PhotoStorage {
   save(file: File): Promise<string>
 }
 
+export interface SignUpInput {
+  email: string
+  password: string
+  displayName: string
+}
+
+export interface AuthService {
+  /**
+   * False when the backend has no accounts (the local mock). The app then skips login
+   * screens and sign-out.
+   */
+  readonly enabled: boolean
+  getUser(): Promise<AuthUser | null>
+  /** Subscribes to sign-in / sign-out. Returns an unsubscribe function. */
+  onChange(listener: (user: AuthUser | null) => void): () => void
+  /** `needsEmailConfirmation` is true when the user must click an emailed link first. */
+  signUp(input: SignUpInput): Promise<{ needsEmailConfirmation: boolean }>
+  signIn(input: { email: string; password: string }): Promise<void>
+  signOut(): Promise<void>
+}
+
+export interface SampleDataService {
+  /** Fills an empty journal with sample visits, wishlist items and lists. No-op if not empty. */
+  load(): Promise<void>
+}
+
 export interface DataService {
+  auth: AuthService
   places: PlaceRepository
   visits: VisitRepository
   wishlist: WishlistRepository
   lists: ListRepository
   profile: ProfileRepository
   photos: PhotoStorage
+  samples: SampleDataService
 }

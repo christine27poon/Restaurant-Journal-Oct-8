@@ -64,3 +64,22 @@ export const profileSchema = z.object({
   show_health_tags: z.boolean(),
 })
 export type ProfileValues = z.infer<typeof profileSchema>
+
+const emailSchema = z
+  .string()
+  .trim()
+  .min(1, 'Add your email')
+  .email('That email doesn’t look right')
+
+export const signInSchema = z.object({
+  email: emailSchema,
+  password: z.string().min(1, 'Add your password'),
+})
+export type SignInValues = z.infer<typeof signInSchema>
+
+export const signUpSchema = z.object({
+  display_name: z.string().trim().min(1, 'Add a name').max(60, 'Keep it under 60 characters'),
+  email: emailSchema,
+  password: z.string().min(8, 'Use at least 8 characters'),
+})
+export type SignUpValues = z.infer<typeof signUpSchema>

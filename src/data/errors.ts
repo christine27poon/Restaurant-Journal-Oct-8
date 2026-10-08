@@ -1,4 +1,4 @@
-export type DataErrorCode = 'not_found' | 'storage_full' | 'invalid_photo' | 'unknown'
+export type DataErrorCode = 'not_found' | 'storage_full' | 'invalid_photo' | 'auth' | 'unknown'
 
 /** Thrown by any data-layer implementation. Messages are safe to show to the user. */
 export class DataError extends Error {

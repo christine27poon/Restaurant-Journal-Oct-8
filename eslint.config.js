@@ -34,8 +34,12 @@ export default tseslint.config(
         {
           patterns: [
             {
-              group: ['@/data/mock/*', '**/data/mock/*'],
-              message: 'Import from the data layer hooks, never the mock implementation.',
+              group: ['@/data/mock/*', '**/data/mock/*', '@/data/supabase/*', '**/data/supabase/*'],
+              message: 'Use the hooks in src/hooks/queries, never a data-layer implementation.',
+            },
+            {
+              group: ['@supabase/*'],
+              message: 'Only src/data may talk to Supabase.',
             },
           ],
         },

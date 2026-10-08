@@ -4,13 +4,17 @@ import { LinkButton } from '@/components/ui/Button'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { QueryView } from '@/components/ui/QueryView'
 import { VisitTimeline, VisitTimelineSkeleton } from '@/components/visit/VisitTimeline'
-import { useProfile, useVisits } from '@/hooks/queries'
+import { useLoadSampleData, useProfile, useVisits } from '@/hooks/queries'
+import { Button } from '@/components/ui/Button'
+import { useToast } from '@/components/ui/toast/useToast'
 
 export function JournalPage() {
   const visits = useVisits({ limit: 30 })
   const profile = useProfile()
   const showHealthTags = profile.data?.preferences.show_health_tags ?? true
   const name = profile.data?.display_name
+  const loadSamples = useLoadSampleData()
+  const toast = useToast()
 
   return (
     <>
@@ -39,10 +43,25 @@ export function JournalPage() {
               title="Your journal is waiting for its first bite"
               description="Log a meal in a few taps — just the place and how it went."
               action={
-                <LinkButton to="/log">
-                  <Plus aria-hidden className="h-5 w-5" />
-                  Log a meal
-                </LinkButton>
+                <div className="flex flex-wrap justify-center gap-3">
+                  <LinkButton to="/log">
+                    <Plus aria-hidden className="h-5 w-5" />
+                    Log a meal
+                  </LinkButton>
+                  <Button
+                    variant="secondary"
+                    disabled={loadSamples.isPending}
+                    onClick={() =>
+                      loadSamples.mutate(undefined, {
+                        onSuccess: () => toast.show('Sample entries added'),
+                        onError: () =>
+                          toast.show('We couldn’t add sample entries. Please try again.'),
+                      })
+                    }
+                  >
+                    {loadSamples.isPending ? 'Adding…' : 'Add sample entries'}
+                  </Button>
+                </div>
               }
             />
           }

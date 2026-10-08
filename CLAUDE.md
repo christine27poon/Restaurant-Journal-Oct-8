@@ -5,7 +5,7 @@ A mobile-first personal journal for eating out well: log visits, save places to 
 ## Stack
 
 React 19 + TypeScript (strict) + Vite · React Router · Tailwind CSS v3 (tokens in `tailwind.config.ts`) · TanStack Query · React Hook Form + Zod · lucide-react (icons) · ESLint + Prettier.
-Do not add dependencies beyond this list without asking. **No Supabase code yet** (no client, auth, or migrations).
+Backend: Supabase (Postgres + Auth + Storage) via `@supabase/supabase-js`. Do not add other dependencies without asking.
 
 ## Commands
 
@@ -16,8 +16,18 @@ Do not add dependencies beyond this list without asking. **No Supabase code yet*
 
 - All reads/writes go through the interfaces in `src/data/repositories.ts`, consumed **only** by the hooks in `src/hooks/queries/`.
 - Components and pages call those hooks. They never import from `src/data/mock/*`, never touch `localStorage`, and never import seed data. ESLint enforces this (`no-restricted-globals`, `no-restricted-imports`).
-- The mock implementation (`src/data/mock/`) is backed by localStorage + seed data. `src/data/index.ts` is the single swap point: to adopt Supabase, add `src/data/supabase/*` implementing the same interfaces and change that one export. No component changes should be needed.
+- Two implementations of the same `DataService`: `src/data/supabase/` (real backend) and `src/data/mock/` (localStorage + seed data, no accounts). `src/data/index.ts` is the single switch: Supabase when `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are set (in `.env.local`, gitignored), otherwise the mock. Keep both implementations in step when an interface changes.
+- Only `src/data/` may import `@supabase/*`; ESLint enforces it.
 - Types in `src/types/` use string UUID ids, ISO date strings, and snake_case fields that mirror future table columns.
+
+## Backend (Supabase)
+
+- Schema lives in `supabase/migrations/` (applied to the project; add new numbered files for changes). Row-level security on every user table, keyed to `auth.uid()`. `places` rows with `user_id IS NULL` are a shared read-only catalog; users can add their own custom places.
+- Photos go to the **private** `visit-photos` bucket under `<user-id>/<uuid>.jpg`. `visits.photo_url` holds that path (or a URL / `/seed/…` path); the visit repository turns paths into signed URLs on read (`src/data/supabase/photos.ts`).
+- `src/data/supabase/database.types.ts` is generated from the schema. Regenerate it after changing the schema.
+- `seed_sample_journal()` is an RPC that fills the signed-in user's empty journal with sample entries (the Journal's "Add sample entries" button).
+- Auth is email + password (`/login`, `/signup`, `RequireAuth` guards the app). In mock mode `auth.enabled` is false and login is skipped.
+- Dashboard settings the code can't set: Authentication > URL Configuration > **Site URL** must be the app's URL (e.g. `http://localhost:5173`) for confirmation-email links to work; "Confirm email" can be switched off for local development.
 
 ## Folder structure
 
