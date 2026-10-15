@@ -1,0 +1,8 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Noodle bowl icon">
+<path id="Bowl" d="M10 23H38C36.8 29.2 32 33 26 33H22C16 33 11.2 29.2 10 23Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Bowl foot" d="M20 36H28" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Noodles" d="M17 14C13.5 17 20.5 18 17 21M23 14C19.5 17 26.5 18 23 21" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Chopsticks" d="M28 20L36 12M32 21L40 13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</svg>

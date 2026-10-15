@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { MailCheck } from 'lucide-react'
+import { BrandMark } from '@/components/layout/BrandMark'
 import { Button } from '@/components/ui/Button'
 import { Field, TextInput } from '@/components/ui/Field'
 import { useAuth } from '@/hooks/useAuth'
@@ -26,12 +27,7 @@ export function AuthPage({ mode }: { mode: Mode }) {
     <div className="grid min-h-screen place-items-center px-4 py-10 pb-safe pt-safe">
       <main id="main" className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <span
-            aria-hidden
-            className="mx-auto mb-4 grid h-12 w-12 place-items-center rounded-xl bg-primary-600 text-white"
-          >
-            <span className="h-5 w-5 rounded-full border-2 border-white" />
-          </span>
+          <BrandMark className="mx-auto mb-4" />
           <h1 className="text-h1">{mode === 'signin' ? 'Welcome back' : 'Start your journal'}</h1>
           <p className="mt-1 text-body text-ink-muted">
             {mode === 'signin'

@@ -3,6 +3,7 @@ import { Plus } from 'lucide-react'
 import { NAV_ITEMS } from '@/lib/nav'
 import { cn } from '@/lib/cn'
 import { LinkButton } from '@/components/ui/Button'
+import { BrandMark } from './BrandMark'
 
 /** Desktop/tablet navigation. Hidden below md, where BottomTabBar takes over. */
 export function SideNav() {
@@ -12,12 +13,7 @@ export function SideNav() {
         to="/"
         className="mb-8 flex items-center gap-2 px-2 font-display text-h3 font-semibold"
       >
-        <span
-          aria-hidden
-          className="grid h-8 w-8 place-items-center rounded-md bg-primary-600 text-white"
-        >
-          <span className="h-3 w-3 rounded-full border-2 border-white" />
-        </span>
+        <BrandMark size={32} />
         Table Notes
       </NavLink>
       <LinkButton to="/log" className="mb-6 w-full">
