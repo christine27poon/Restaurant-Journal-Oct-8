@@ -73,7 +73,13 @@ export interface PhotoStorage {
 export interface SignUpInput {
   email: string
   password: string
-  displayName: string
+  /** Stored as the profile's display name and used in the greeting. */
+  firstName: string
+  lastName: string
+  /** ISO date, YYYY-MM-DD. */
+  dateOfBirth: string
+  /** Becomes the profile's "home city". */
+  city: string
 }
 
 export interface AuthService {

@@ -77,9 +77,25 @@ export const signInSchema = z.object({
 })
 export type SignInValues = z.infer<typeof signInSchema>
 
+/** ISO date (YYYY-MM-DD) that is real, not in the future, and not absurdly old. */
+const dateOfBirthSchema = z
+  .string()
+  .min(1, 'Add your date of birth')
+  .refine((value) => {
+    const date = new Date(`${value}T00:00:00`)
+    return !Number.isNaN(date.getTime()) && value >= '1900-01-01' && date <= new Date()
+  }, 'Enter a valid date of birth')
+
 export const signUpSchema = z.object({
-  display_name: z.string().trim().min(1, 'Add a name').max(60, 'Keep it under 60 characters'),
+  first_name: z
+    .string()
+    .trim()
+    .min(1, 'Add your first name')
+    .max(60, 'Keep it under 60 characters'),
+  last_name: z.string().trim().min(1, 'Add your last name').max(60, 'Keep it under 60 characters'),
   email: emailSchema,
+  date_of_birth: dateOfBirthSchema,
+  city: z.string().trim().min(1, 'Add your city').max(60, 'Keep it under 60 characters'),
   password: z.string().min(8, 'Use at least 8 characters'),
 })
 export type SignUpValues = z.infer<typeof signUpSchema>

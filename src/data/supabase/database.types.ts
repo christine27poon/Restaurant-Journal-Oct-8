@@ -124,22 +124,28 @@ export type Database = {
       profiles: {
         Row: {
           created_at: string
+          date_of_birth: string | null
           display_name: string
           id: string
+          last_name: string | null
           preferences: Json
           updated_at: string
         }
         Insert: {
           created_at?: string
+          date_of_birth?: string | null
           display_name: string
           id: string
+          last_name?: string | null
           preferences?: Json
           updated_at?: string
         }
         Update: {
           created_at?: string
+          date_of_birth?: string | null
           display_name?: string
           id?: string
+          last_name?: string | null
           preferences?: Json
           updated_at?: string
         }

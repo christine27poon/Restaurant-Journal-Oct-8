@@ -1,4 +1,5 @@
 import { createContext } from 'react'
+import type { SignUpInput } from '@/data'
 import type { AuthUser } from '@/types'
 
 export interface AuthContextValue {
@@ -8,11 +9,7 @@ export interface AuthContextValue {
   /** False for the local mock backend, which has no accounts. */
   enabled: boolean
   signIn: (input: { email: string; password: string }) => Promise<void>
-  signUp: (input: {
-    email: string
-    password: string
-    displayName: string
-  }) => Promise<{ needsEmailConfirmation: boolean }>
+  signUp: (input: SignUpInput) => Promise<{ needsEmailConfirmation: boolean }>
   signOut: () => Promise<void>
 }
 

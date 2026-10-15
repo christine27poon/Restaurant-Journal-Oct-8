@@ -27,6 +27,7 @@ Backend: Supabase (Postgres + Auth + Storage) via `@supabase/supabase-js`. Do no
 - `src/data/supabase/database.types.ts` is generated from the schema. Regenerate it after changing the schema.
 - `seed_sample_journal()` is an RPC that fills the signed-in user's empty journal with sample entries (the Journal's "Add sample entries" button).
 - Auth is email + password (`/login`, `/signup`, `RequireAuth` guards the app). In mock mode `auth.enabled` is false and login is skipped.
+- Sign-up collects first name, last name, date of birth, city, email, password. They travel as auth user metadata and the `handle_new_user()` trigger writes them: first name → `profiles.display_name`, city → `preferences.home_city`, last name and date of birth → `profiles.last_name` / `profiles.date_of_birth` (stored only; no screen shows them yet).
 - Dashboard settings the code can't set: Authentication > URL Configuration > **Site URL** must be the app's URL (e.g. `http://localhost:5173`) for confirmation-email links to work; "Confirm email" can be switched off for local development.
 
 ## Folder structure

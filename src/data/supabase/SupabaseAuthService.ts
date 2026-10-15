@@ -48,11 +48,20 @@ export class SupabaseAuthService implements AuthService {
     return () => data.subscription.unsubscribe()
   }
 
-  async signUp({ email, password, displayName }: SignUpInput) {
+  async signUp({ email, password, firstName, lastName, dateOfBirth, city }: SignUpInput) {
     const { data, error } = await this.db.auth.signUp({
       email,
       password,
-      options: { data: { display_name: displayName }, emailRedirectTo: window.location.origin },
+      options: {
+        // Read by the handle_new_user() trigger, which creates the profile row.
+        data: {
+          display_name: firstName,
+          last_name: lastName,
+          date_of_birth: dateOfBirth,
+          home_city: city,
+        },
+        emailRedirectTo: window.location.origin,
+      },
     })
     if (error) {
       throw new DataError(

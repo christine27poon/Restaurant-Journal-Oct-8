@@ -11,6 +11,9 @@ import { signInSchema, signUpSchema, type SignInValues, type SignUpValues } from
 
 type Mode = 'signin' | 'signup'
 
+/** Latest selectable date of birth (local date, YYYY-MM-DD). */
+const TODAY = new Date().toLocaleDateString('sv-SE')
+
 export function AuthPage({ mode }: { mode: Mode }) {
   const { user, enabled } = useAuth()
   const location = useLocation()
@@ -143,7 +146,10 @@ function SignUpForm({ from }: { from: string }) {
       const { needsEmailConfirmation } = await signUp({
         email: values.email,
         password: values.password,
-        displayName: values.display_name,
+        firstName: values.first_name,
+        lastName: values.last_name,
+        dateOfBirth: values.date_of_birth,
+        city: values.city,
       })
       if (needsEmailConfirmation) setConfirmEmail(values.email)
       else navigate(from, { replace: true })
@@ -179,14 +185,24 @@ function SignUpForm({ from }: { from: string }) {
 
   return (
     <form noValidate onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <Field label="Your name" htmlFor="auth-name" error={errors.display_name?.message}>
-        <TextInput
-          id="auth-name"
-          autoComplete="given-name"
-          invalid={Boolean(errors.display_name)}
-          {...register('display_name')}
-        />
-      </Field>
+      <div className="grid grid-cols-2 gap-4">
+        <Field label="First name" htmlFor="auth-first-name" error={errors.first_name?.message}>
+          <TextInput
+            id="auth-first-name"
+            autoComplete="given-name"
+            invalid={Boolean(errors.first_name)}
+            {...register('first_name')}
+          />
+        </Field>
+        <Field label="Last name" htmlFor="auth-last-name" error={errors.last_name?.message}>
+          <TextInput
+            id="auth-last-name"
+            autoComplete="family-name"
+            invalid={Boolean(errors.last_name)}
+            {...register('last_name')}
+          />
+        </Field>
+      </div>
       <Field label="Email" htmlFor="auth-email" error={errors.email?.message}>
         <TextInput
           id="auth-email"
@@ -197,12 +213,26 @@ function SignUpForm({ from }: { from: string }) {
           {...register('email')}
         />
       </Field>
-      <Field
-        label="Password"
-        htmlFor="auth-password"
-        hint="At least 8 characters."
-        error={errors.password?.message}
-      >
+      <Field label="Date of Birth" htmlFor="auth-dob" error={errors.date_of_birth?.message}>
+        <TextInput
+          id="auth-dob"
+          type="date"
+          autoComplete="bday"
+          min="1900-01-01"
+          max={TODAY}
+          invalid={Boolean(errors.date_of_birth)}
+          {...register('date_of_birth')}
+        />
+      </Field>
+      <Field label="City" htmlFor="auth-city" error={errors.city?.message}>
+        <TextInput
+          id="auth-city"
+          autoComplete="address-level2"
+          invalid={Boolean(errors.city)}
+          {...register('city')}
+        />
+      </Field>
+      <Field label="Password" htmlFor="auth-password" error={errors.password?.message}>
         <TextInput
           id="auth-password"
           type="password"
@@ -212,6 +242,9 @@ function SignUpForm({ from }: { from: string }) {
           {...register('password')}
         />
       </Field>
+      <p id="auth-password-hint" className="text-small text-ink-muted">
+        At least 8 characters.
+      </p>
       <FormError message={error} />
       <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
         {isSubmitting ? 'Creating account…' : 'Create account'}
